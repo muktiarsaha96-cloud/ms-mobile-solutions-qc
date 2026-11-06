@@ -1,91 +1,199 @@
+
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS Mobile Solutions | QC Management</title>
 <link rel="stylesheet" href="/style.css">
+<style>
+.whatsapp-btn {
+ background:#25D366!important;
+ color:white!important;
+ border:0!important;
+ border-radius:7px;
+ padding:10px 14px;
+ font-weight:bold;
+ cursor:pointer;
+}
+</style>
 </head>
 <body>
+
 <div id="loginView" class="login-wrap">
-  <form id="loginForm" class="login-card">
-    <div class="brand-mark">MS</div><h1>MS MOBILE SOLUTIONS</h1><p>QC & Customer Management</p>
-    <label>Username<input name="username" autocomplete="username" required></label>
-    <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
-    <button class="primary">Sign in</button><div id="loginError" class="error"></div>
-  </form>
+<form id="loginForm" class="login-card">
+<div class="brand-mark">MS</div>
+<h1>MS MOBILE SOLUTIONS</h1>
+<p>QC & Customer Management</p>
+<label>Username<input name="username" autocomplete="username" required></label>
+<label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+<button class="primary">Sign in</button>
+<div id="loginError" class="error"></div>
+</form>
 </div>
+
 <div id="appView" class="app hidden">
-  <aside class="sidebar">
-    <div class="brand"><div class="brand-mark small">MS</div><div><b>MS MOBILE</b><small>SOLUTIONS</small></div></div>
-    <button class="nav active" data-tab="form">＋ New QC Form</button>
-    <button class="nav" data-tab="records">▤ Customer Records</button>
-    <button class="nav admin-only" data-tab="users">♙ Staff & Access</button>
-    <div class="side-bottom"><span id="who"></span><button id="logoutBtn" class="ghost">Log out</button></div>
-  </aside>
-  <main class="main">
-    <header><div><h2 id="pageTitle">New QC Form</h2><p>Mobile phone receiving, checking & repair records</p></div><div class="header-tag">9679335252 / 7407363526</div></header>
-    <section id="formTab" class="tab">
-      <form id="qcForm">
-        <input type="hidden" name="record_id">
-        <div class="panel">
-          <div class="panel-title">1. CUSTOMER & DEVICE DETAILS</div>
-          <div class="fields three">
-            <label>Customer Name *<input name="customer_name" required></label>
-            <label>Mobile Number<input name="mobile_number" inputmode="tel"></label>
-            <label>Date<input name="received_date" type="date"></label>
-            <label>Serial Number<input name="serial_number"></label>
-            <label>Brand / Model<input name="brand_model"></label>
-            <label>Delivery Date<input name="delivery_date" type="date"></label>
-            <label>IMEI 1<input name="imei1"></label><label>IMEI 2<input name="imei2"></label>
-            <label>Device Type<select name="device_type"><option value="">Select</option><option>Android</option><option>iPhone</option><option>Other</option></select></label>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title">2. PHYSICAL CONDITION AT RECEIVING</div>
-          <div class="fields two" id="physicalFields"></div>
-          <label class="wide">Accessories Received
-            <div class="checks inline"><label><input type="checkbox" name="accessories" value="Charger"> Charger</label><label><input type="checkbox" name="accessories" value="Cable"> Cable</label><label><input type="checkbox" name="accessories" value="SIM Tray"> SIM Tray</label><label><input type="checkbox" name="accessories" value="Other"> Other</label></div>
-          </label>
-        </div>
-        <div class="panel">
-          <div class="panel-title">3. FUNCTION / ALL PARTS CHECKING <small>(OK / Fault / N/A)</small></div>
-          <div class="qc-grid" id="checksGrid"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-title">4. CUSTOMER COMPLAINT / FAULT DETAILS & WORK REQUIRED</div>
-          <div class="fields one">
-            <label>Customer Complaint<textarea name="complaint" rows="2"></textarea></label>
-            <label>Technician Observation / Existing Faults<textarea name="technician_observation" rows="2"></textarea></label>
-            <label>Work To Be Done / Parts To Be Changed<textarea name="work_required" rows="2"></textarea></label>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-title">5. AMOUNT, DELIVERY & CONFIRMATION</div>
-          <div class="fields three">
-            <label>Repair Estimate / Amount<input name="estimate_amount" type="number" min="0" step="0.01"></label>
-            <label>Advance Payment<input name="advance_payment" type="number" min="0" step="0.01"></label>
-            <label>Balance Amount<input name="balance_amount" type="number" min="0" step="0.01"></label>
-            <label>Repair / Delivery Time<input name="repair_time"></label>
-            <label>Received By / Technician<input name="received_by"></label>
-            <label>Repair Status<select name="status"><option>Received</option><option>Checking</option><option>Waiting for Parts</option><option>In Repair</option><option>Ready for Delivery</option><option>Delivered</option><option>Cancelled</option></select></label>
-          </div>
-          <p class="declaration"><b>CUSTOMER DECLARATION</b><br>I have checked the receiving condition and device details. Pre-existing faults / damage are recorded above.</p>
-          <div class="fields two"><label>Customer Signature<input name="customer_signature" placeholder="Type customer name / sign on printed copy"></label><label>Technician Signature<input name="technician_signature" placeholder="Type technician name"></label></div>
-        </div>
-        <div class="actions"><button class="primary" type="submit">Save QC Record</button><button type="button" id="savePdf" class="secondary">Save & Export A4 PDF</button><button type="button" id="resetForm" class="ghost">Clear Form</button><span id="formMessage"></span></div>
-      </form>
-    </section>
-    <section id="recordsTab" class="tab hidden">
-      <div class="toolbar"><input id="searchBox" placeholder="Search name, mobile, serial number or IMEI"><button id="searchBtn" class="secondary">Search</button><button id="newRecordBtn" class="primary">＋ New Record</button></div>
-      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Mobile</th><th>Device</th><th>Received</th><th>Delivery</th><th>Status</th><th>Amount</th><th>Actions</th></tr></thead><tbody id="recordsBody"></tbody></table></div>
-    </section>
-    <section id="usersTab" class="tab hidden">
-      <div class="panel"><div class="panel-title">CREATE STAFF / USER LOGIN</div>
-        <form id="userForm" class="fields three"><label>Full Name<input name="name" required></label><label>Username<input name="username" required></label><label>Temporary Password (10+ characters)<input name="password" minlength="10" required></label><label>Role<select name="role"><option value="staff">Staff</option><option value="admin">Admin</option></select></label><div class="align-end"><button class="primary">Create Login</button></div></form>
-      </div>
-      <div class="table-wrap"><table><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Active</th><th>Action</th></tr></thead><tbody id="usersBody"></tbody></table></div>
-    </section>
-  </main>
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-mark small">MS</div>
+<div><b>MS MOBILE</b><small>SOLUTIONS</small></div>
 </div>
+<button class="nav active" data-tab="form">＋ New QC Form</button>
+<button class="nav" data-tab="records">▤ Customer Records</button>
+<button class="nav admin-only" data-tab="users">♙ Staff & Access</button>
+<div class="side-bottom">
+<span id="who"></span>
+<button id="logoutBtn" class="ghost">Log out</button>
+</div>
+</aside>
+
+<main class="main">
+<header>
+<div>
+<h2 id="pageTitle">New QC Form</h2>
+<p>Mobile phone receiving, checking & repair records</p>
+</div>
+<div class="header-tag">9679335252 / 7407363526</div>
+</header>
+
+<section id="formTab" class="tab">
+<form id="qcForm">
+<input type="hidden" name="record_id">
+
+<div class="panel">
+<div class="panel-title">1. CUSTOMER & DEVICE DETAILS</div>
+<div class="fields three">
+<label>Customer Name *<input name="customer_name" required></label>
+<label>Mobile Number<input name="mobile_number" inputmode="tel"></label>
+<label>Date<input name="received_date" type="date"></label>
+<label>Serial Number<input name="serial_number"></label>
+<label>Brand / Model<input name="brand_model"></label>
+<label>Delivery Date<input name="delivery_date" type="date"></label>
+<label>IMEI 1<input name="imei1"></label>
+<label>IMEI 2<input name="imei2"></label>
+<label>Device Type
+<select name="device_type">
+<option value="">Select</option>
+<option>Android</option>
+<option>iPhone</option>
+<option>Other</option>
+</select>
+</label>
+</div>
+</div>
+
+<div class="panel">
+<div class="panel-title">2. PHYSICAL CONDITION AT RECEIVING</div>
+<div class="fields two" id="physicalFields"></div>
+<label class="wide">Accessories Received
+<div class="checks inline">
+<label><input type="checkbox" name="accessories" value="Charger"> Charger</label>
+<label><input type="checkbox" name="accessories" value="Cable"> Cable</label>
+<label><input type="checkbox" name="accessories" value="SIM Tray"> SIM Tray</label>
+<label><input type="checkbox" name="accessories" value="Other"> Other</label>
+</div>
+</label>
+</div>
+
+<div class="panel">
+<div class="panel-title">3. FUNCTION / ALL PARTS CHECKING <small>(OK / Fault / N/A)</small></div>
+<div class="qc-grid" id="checksGrid"></div>
+</div>
+
+<div class="panel">
+<div class="panel-title">4. CUSTOMER COMPLAINT / FAULT DETAILS & WORK REQUIRED</div>
+<div class="fields one">
+<label>Customer Complaint<textarea name="complaint" rows="2"></textarea></label>
+<label>Technician Observation / Existing Faults<textarea name="technician_observation" rows="2"></textarea></label>
+<label>Work To Be Done / Parts To Be Changed<textarea name="work_required" rows="2"></textarea></label>
+</div>
+</div>
+
+<div class="panel">
+<div class="panel-title">5. AMOUNT, DELIVERY & CONFIRMATION</div>
+<div class="fields three">
+<label>Repair Estimate / Amount<input name="estimate_amount" type="number" min="0" step="0.01"></label>
+<label>Advance Payment<input name="advance_payment" type="number" min="0" step="0.01"></label>
+<label>Balance Amount<input name="balance_amount" type="number" min="0" step="0.01"></label>
+<label>Repair / Delivery Time<input name="repair_time"></label>
+<label>Received By / Technician<input name="received_by"></label>
+<label>Repair Status
+<select name="status">
+<option>Received</option>
+<option>Checking</option>
+<option>Waiting for Parts</option>
+<option>In Repair</option>
+<option>Ready for Delivery</option>
+<option>Delivered</option>
+<option>Cancelled</option>
+</select>
+</label>
+</div>
+
+<p class="declaration"><b>CUSTOMER DECLARATION</b><br>
+I have checked the receiving condition and device details. Pre-existing faults / damage are recorded above.</p>
+
+<div class="fields two">
+<label>Customer Signature<input name="customer_signature" placeholder="Type customer name / sign on printed copy"></label>
+<label>Technician Signature<input name="technician_signature" placeholder="Type technician name"></label>
+</div>
+</div>
+
+<div class="actions">
+<button class="primary" type="submit">Save QC Record</button>
+<button type="button" id="savePdf" class="secondary">Save & Export A4 PDF</button>
+<button type="button" id="shareWhatsApp" class="whatsapp-btn">Share Full Details on WhatsApp</button>
+<button type="button" id="resetForm" class="ghost">Clear Form</button>
+<span id="formMessage"></span>
+</div>
+</form>
+</section>
+
+<section id="recordsTab" class="tab hidden">
+<div class="toolbar">
+<input id="searchBox" placeholder="Search name, mobile, serial number or IMEI">
+<button id="searchBtn" class="secondary">Search</button>
+<button id="newRecordBtn" class="primary">＋ New Record</button>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>ID</th><th>Customer</th><th>Mobile</th><th>Device</th>
+<th>Received</th><th>Delivery</th><th>Status</th><th>Amount</th><th>Actions</th>
+</tr>
+</thead>
+<tbody id="recordsBody"></tbody>
+</table>
+</div>
+</section>
+
+<section id="usersTab" class="tab hidden">
+<div class="panel">
+<div class="panel-title">CREATE STAFF / USER LOGIN</div>
+<form id="userForm" class="fields three">
+<label>Full Name<input name="name" required></label>
+<label>Username<input name="username" required></label>
+<label>Temporary Password (10+ characters)<input name="password" minlength="10" required></label>
+<label>Role
+<select name="role">
+<option value="staff">Staff</option>
+<option value="admin">Admin</option>
+</select>
+</label>
+<div class="align-end"><button class="primary">Create Login</button></div>
+</form>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Active</th><th>Action</th></tr></thead>
+<tbody id="usersBody"></tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+
 <script src="/app.js"></script>
-</body></html>
+</body>
+</html>

@@ -29,12 +29,30 @@ function showTab(tab){
 }
 function updateBalance(){
  const f=$("#qcForm");f.elements.balance_amount.value=Math.max(0,Number(f.elements.estimate_amount.value||0)-Number(f.elements.advance_payment.value||0)).toFixed(2);
-}
 async function saveRecord(){
- const data=formObject();if(!data.customer_name.trim())throw new Error("Customer name is required.");
+ const data=formObject();
+
+ if(!data.customer_name.trim())
+   throw new Error("Customer name is required.");
+
  const id=$("#qcForm").elements.record_id.value;
- const r=await api(id?`/api/customers/${id}`:"/api/customers",{method:id?"PUT":"POST",body:JSON.stringify(data)});
- savedId=id||r.id;$("#qcForm").elements.record_id.value=savedId;return savedId;
+
+ const r=await api(
+   id?`/api/customers/${id}`:"/api/customers",
+   {
+     method:id?"PUT":"POST",
+     body:JSON.stringify(data)
+   }
+ );
+
+ savedId=id||r.id;
+ $("#qcForm").elements.record_id.value=savedId;
+
+ if(!id && r.serial_number){
+   $("#qcForm").elements.serial_number.value=r.serial_number;
+ }
+
+ return savedId;
 }
 function whatsappNumber(value){
  let n=String(value||"").replace(/\D/g,"");
